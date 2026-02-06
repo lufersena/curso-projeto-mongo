@@ -39,7 +39,7 @@ public class UserResource {
 	
 	@RequestMapping(method = RequestMethod.POST)//metodo end point rest caminho users 
 	public ResponseEntity<Void> insert(@RequestBody UserDTO objDto){// anotation end point aceite o obj
-		User obj = service.fromDTO(objDto);
+		User obj = service.fromDTO(objDto);//converte o dto para user 
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -51,4 +51,11 @@ public class UserResource {
 		return ResponseEntity.noContent().build();	
 	}
 	
+	@RequestMapping(value ="/{id}",method = RequestMethod.PUT)//metodo end point rest caminho (users/id) 
+	public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id ){// anotation end point aceite o obj-- anotation que casa as id
+		User obj = service.fromDTO(objDto);
+		obj.setId(id);//garante que a id vai ser a mesma da requisição
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
+	}
 }
