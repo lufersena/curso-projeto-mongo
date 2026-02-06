@@ -45,4 +45,10 @@ public class UserResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	@RequestMapping(value ="/{id}",method = RequestMethod.DELETE)//metodo end point rest caminho (users/id) 
+	public ResponseEntity<Void> delete(@PathVariable String id){// anotation que casa as id
+		service.delete(id);
+		return ResponseEntity.noContent().build();	
+	}
+	
 }
