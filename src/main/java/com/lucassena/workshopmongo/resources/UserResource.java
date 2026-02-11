@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.lucassena.workshopmongo.domain.Post;
 import com.lucassena.workshopmongo.domain.User;
 import com.lucassena.workshopmongo.dto.UserDTO;
 import com.lucassena.workshopmongo.services.UserService;
@@ -57,5 +58,11 @@ public class UserResource {
 		obj.setId(id);//garante que a id vai ser a mesma da requisição
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(value ="/{id}/posts",method = RequestMethod.GET)//metodo end point rest caminho (users/id/post) 
+	public ResponseEntity<List<Post>> findPosts(@PathVariable String id){// anotation que casa as id
+		User obj = service.findById(id);
+		return ResponseEntity.ok().body(obj.getPosts());
 	}
 }
