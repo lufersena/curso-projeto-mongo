@@ -3,6 +3,7 @@ package com.lucassena.workshopmongo.repository;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.lucassena.workshopmongo.domain.Post;
@@ -10,5 +11,9 @@ import com.lucassena.workshopmongo.domain.Post;
 @Repository
 public interface PostRepository extends MongoRepository<Post, String>{
 
-	List<Post> findByTitleContainingIgnoreCase(String text); // query methods
+	@Query("{ 'title': { $regex: ?0, $options: 'i' } }") // consulta com query anotation - campo = title - ?0 = primeiro parametro do metodo - opções = i -ignora letras maiusculas 
+	List<Post> searchTitle(String text);
+	
+	List<Post> findByTitleContainingIgnoreCase(String text); // consulta com query methods
+	
 }
