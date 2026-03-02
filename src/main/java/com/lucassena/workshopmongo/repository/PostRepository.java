@@ -1,5 +1,6 @@
 package com.lucassena.workshopmongo.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -9,11 +10,20 @@ import org.springframework.stereotype.Repository;
 import com.lucassena.workshopmongo.domain.Post;
 
 @Repository
-public interface PostRepository extends MongoRepository<Post, String>{
+public interface PostRepository extends MongoRepository<Post, String> {
 
-	@Query("{ 'title': { $regex: ?0, $options: 'i' } }") // consulta com query anotation - campo = title - ?0 = primeiro parametro do metodo - opções = i -ignora letras maiusculas 
+	@Query("{ 'title': { $regex: ?0, $options: 'i' } }")
 	List<Post> searchTitle(String text);
 	
-	List<Post> findByTitleContainingIgnoreCase(String text); // consulta com query methods
+	List<Post> findByTitleContainingIgnoreCase(String text);
 	
+	@Query("{ $and: [ { date: {$gte: ?1} }, { date: { $lte: ?2} } , { $or: [ { 'title': { $regex: ?0, $options: 'i' } }, { 'body': { $regex: ?0, $options: 'i' } }, { 'comments.text': { $regex: ?0, $options: 'i' } } ] } ] }")//gte maior ou igual minDate(primeiro parametro ?1) --- lte menor ou igual maxDate( segundo parametro ?2)
+	List<Post> fullSearch(String text, Date minDate, Date maxDate);
 }
+
+
+
+//gte maior ou igual minDate(primeiro parametro ?1) --- lte menor ou igual maxDate( segundo parametro ?2)
+		
+
+	
